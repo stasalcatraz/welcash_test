@@ -1,0 +1,13 @@
+﻿[]
+Coordinates=87,1,71,33
+ExplicitSubNodes=params['date_from']
+
+[fdqIssues]
+Coordinates=0,0,68,141
+
+[fdcConnection]
+Coordinates=87,53,86,33
+
+[updIssues]
+Coordinates=87,105,65,33
+
