@@ -1,6 +1,7 @@
 /* Execute with SYSDBA privileges */
---drop user bugtracker cascade;
---drop role bugtracker_user;
+drop user bugtracker cascade;
+drop user bt_user cascade;
+drop role bugtracker_user;
 /* Создание схемы */
 create user bugtracker identified by bugtracker quota unlimited on USERS;
 /
@@ -98,8 +99,7 @@ end;
 create or replace view bugtracker.vw_work_days as
 select
   to_date(to_char("days"."date", 'MM-DD-YYYY') || ' ' || hours."begin", 'MM-DD-YYYY HH24:MI') as "begin",
-  to_date(to_char("days"."date", 'MM-DD-YYYY') || ' ' || hours."end", 'MM-DD-YYYY HH24:MI') as "end",
-  to_char("days"."date", 'D', 'nls_date_language=ukrainian') as weekday
+  to_date(to_char("days"."date", 'MM-DD-YYYY') || ' ' || hours."end", 'MM-DD-YYYY HH24:MI') as "end"
 from
   (
     select 
@@ -109,7 +109,7 @@ from
       cross join (select 0 as a from dual union all select 1 from dual union all select 2 from dual union all select 3 from dual union all select 4 from dual union all select 5 from dual union all select 6 from dual union all select 7 from dual union all select 8 from dual union all select 9 from dual) b
       cross join (select 0 as a from dual union all select 1 from dual union all select 2 from dual union all select 3 from dual union all select 4 from dual union all select 5 from dual union all select 6 from dual union all select 7 from dual union all select 8 from dual union all select 9 from dual) c
     where
-      to_char(current_date - (c.a + 10 * b.a + 100 * a.a), 'D', 'nls_date_language=ukrainian') between '1' and '5'
+      to_char(current_date - (c.a + 10 * b.a + 100 * a.a), 'DY', 'nls_date_language=american') in ('MON', 'TUE', 'WED', 'THU', 'FRI')
   ) "days"
   cross join (select '09:00' as "begin", '13:00' as "end" from dual union all select '14:00', '18:00' from dual) hours;
 /
@@ -127,7 +127,7 @@ select
   im.status_id,
   s.name as status,
   i.planned_time,
-  nvl((
+  cast(nvl((
     select sum(actual_time) from (
       select
         ((
@@ -146,7 +146,7 @@ select
       where
         im1.issue_id = i.id
     )
-  ), 0) as actual_time
+  ), 0) as float) as actual_time
 from
   tbl_issues i
   inner join tbl_issue_movements im on i.last_movement_id = im.id
@@ -163,7 +163,7 @@ select
   im.issue_id,
   im.movement_date,
   s.name as status,
-  nvl((
+  cast(nvl((
     select
       sum(least("end", nvl(imn.movement_date, current_date)) - greatest("begin", im.movement_date)) * 24
     from
@@ -171,7 +171,7 @@ select
     where
       w."end" > im.movement_date
       and w."begin" < nvl(imn.movement_date, current_date)
-  ), 0) as actual_time
+  ), 0) as float) as actual_time
 from
   tbl_issue_movements im
   inner join tbl_statuses s on im.status_id = s.id
@@ -217,21 +217,21 @@ end;
   Процедура sp_issues_ins. Добавляет задачу с описанием description и планируемым 
   количеством часов planned_time и присваеивает ей состояние "В очереди".
 */
-create or replace procedure bugtracker.sp_issues_ins(description varchar2, planned_time number) as
+create or replace procedure bugtracker.sp_issues_ins(description varchar2, planned_time float) as
   iss_id number;
+  mv_id number;
 begin
   select seq_issues.nextval into iss_id from dual;
+  select seq_issue_movements.nextval into mv_id from dual;
 
   insert into tbl_issues(id, description, planned_time)
   values (iss_id, sp_issues_ins.description, sp_issues_ins.planned_time);
 
-  insert into tbl_issue_movements (
-    issue_id,
-    status_id
-  ) values (
-    iss_id,
+  insert into tbl_issue_movements (id, issue_id, status_id)
+  values (mv_id, iss_id,
     1 -- В очереди
   );
+  update tbl_issues set last_movement_id = mv_id where id = iss_id;
 end;
 /
 /*

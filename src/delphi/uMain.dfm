@@ -2,98 +2,98 @@ object fmMain: TfmMain
   Left = 0
   Top = 0
   Caption = #1041#1072#1075#1090#1088#1077#1082#1077#1088
-  ClientHeight = 735
-  ClientWidth = 1148
+  ClientHeight = 919
+  ClientWidth = 1435
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -14
+  Font.Height = -18
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
   OnShow = FormShow
   PixelsPerInch = 96
-  TextHeight = 17
+  TextHeight = 22
   object Splitter1: TSplitter
     Left = 0
-    Top = 456
-    Width = 1148
-    Height = 4
+    Top = 570
+    Width = 1435
+    Height = 5
     Cursor = crVSplit
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
     Align = alBottom
   end
   object pnFilter: TPanel
     Left = 0
-    Top = 48
-    Width = 1148
-    Height = 41
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Top = 60
+    Width = 1435
+    Height = 51
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
     Align = alTop
     TabOrder = 1
     object lbDateFrom: TLabel
-      Left = 9
-      Top = 11
-      Width = 42
-      Height = 17
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 11
+      Top = 14
+      Width = 52
+      Height = 22
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Caption = #1044#1072#1090#1072' '#1079
     end
     object lbDateTo: TLabel
-      Left = 191
-      Top = 11
-      Width = 52
-      Height = 17
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 239
+      Top = 14
+      Width = 64
+      Height = 22
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Caption = #1044#1072#1090#1072' '#1087#1086
     end
     object dtpDateTo: TDateTimePicker
-      Left = 250
-      Top = 8
-      Width = 125
-      Height = 25
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 313
+      Top = 10
+      Width = 156
+      Height = 30
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Date = 42512.715752743050000000
       Time = 42512.715752743050000000
       TabOrder = 0
     end
     object bnRefresh: TBitBtn
-      Left = 383
-      Top = 8
-      Width = 118
-      Height = 26
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 479
+      Top = 10
+      Width = 147
+      Height = 33
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Action = aRefresh
       Caption = #1055#1086#1085#1086#1074#1080#1090#1080
       TabOrder = 1
     end
     object dtpDateFrom: TDateTimePicker
-      Left = 59
-      Top = 8
-      Width = 121
-      Height = 25
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Left = 74
+      Top = 10
+      Width = 151
+      Height = 30
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Date = 42512.571426354170000000
       Time = 42512.571426354170000000
       TabOrder = 2
@@ -102,46 +102,46 @@ object fmMain: TfmMain
   object tbMain: TToolBar
     Left = 0
     Top = 0
-    Width = 1148
-    Height = 48
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
-    ButtonHeight = 48
-    ButtonWidth = 49
+    Width = 1435
+    Height = 60
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    ButtonHeight = 60
+    ButtonWidth = 61
     Images = ilMain
     TabOrder = 0
     object bnExit: TToolButton
       Left = 0
       Top = 0
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Action = aExit
     end
     object ToolButton1: TToolButton
-      Left = 49
+      Left = 61
       Top = 0
-      Width = 10
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Width = 13
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Caption = 'ToolButton1'
       ImageIndex = 1
       Style = tbsSeparator
     end
     object DBNavigator1: TDBNavigator
-      Left = 59
+      Left = 74
       Top = 0
-      Width = 288
-      Height = 48
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Width = 360
+      Height = 60
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       DataSource = dsIssues
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbPost, nbCancel, nbRefresh]
       TabOrder = 0
@@ -149,13 +149,13 @@ object fmMain: TfmMain
   end
   object pnBottom: TPanel
     Left = 0
-    Top = 460
-    Width = 1148
-    Height = 275
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Top = 575
+    Width = 1435
+    Height = 344
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
     Align = alBottom
     BevelOuter = bvNone
     Ctl3D = True
@@ -163,31 +163,31 @@ object fmMain: TfmMain
     TabOrder = 3
     object Splitter2: TSplitter
       Left = 0
-      Top = 85
-      Width = 1148
-      Height = 4
+      Top = 106
+      Width = 1435
+      Height = 5
       Cursor = crVSplit
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Align = alTop
     end
     object dbgIssueMovements: TDBGrid
       Left = 0
-      Top = 89
-      Width = 1148
-      Height = 186
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Top = 111
+      Width = 1435
+      Height = 233
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Align = alClient
       DataSource = dmData.dsIssueMovements
       TabOrder = 0
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
-      TitleFont.Height = -14
+      TitleFont.Height = -18
       TitleFont.Name = 'Tahoma'
       TitleFont.Style = []
       Columns = <
@@ -212,157 +212,157 @@ object fmMain: TfmMain
     object pnRecord: TPanel
       Left = 0
       Top = 0
-      Width = 1148
-      Height = 85
-      Margins.Left = 4
-      Margins.Top = 4
-      Margins.Right = 4
-      Margins.Bottom = 4
+      Width = 1435
+      Height = 106
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
       Align = alTop
-      Constraints.MinWidth = 975
+      Constraints.MinWidth = 1219
       TabOrder = 1
       DesignSize = (
-        1148
-        85)
+        1435
+        106)
       object dbtId: TDBText
-        Left = 34
-        Top = 8
-        Width = 81
-        Height = 21
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 43
+        Top = 10
+        Width = 101
+        Height = 26
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         DataField = 'id'
         DataSource = dsIssues
       end
       object lbNo: TLabel
-        Left = 10
-        Top = 8
-        Width = 16
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 13
+        Top = 10
+        Width = 21
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Caption = #8470
       end
       object lbPlanned: TLabel
-        Left = 95
-        Top = 8
-        Width = 122
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 119
+        Top = 10
+        Width = 155
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Caption = #1047#1072#1087#1083#1072#1085#1086#1074#1072#1085#1080#1081' '#1095#1072#1089':'
       end
       object lbHours: TLabel
-        Left = 264
-        Top = 8
-        Width = 42
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 330
+        Top = 10
+        Width = 52
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Caption = #1075#1086#1076#1080#1085'.'
       end
       object lbActual: TLabel
-        Left = 314
-        Top = 8
-        Width = 69
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 393
+        Top = 10
+        Width = 85
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Caption = #1060#1072#1082#1090#1080#1095#1085#1086':'
       end
       object lbStatus: TLabel
-        Left = 450
-        Top = 8
-        Width = 52
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 563
+        Top = 10
+        Width = 59
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Caption = #1057#1090#1072#1090#1091#1089':'
       end
       object dbtStatus: TDBText
-        Left = 508
-        Top = 8
-        Width = 60
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 635
+        Top = 10
+        Width = 75
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         AutoSize = True
         DataField = 'status'
         DataSource = dsIssues
       end
       object dbtActualTime: TDBText
-        Left = 386
-        Top = 8
-        Width = 43
-        Height = 21
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 483
+        Top = 10
+        Width = 53
+        Height = 26
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         DataField = 'actual_time'
         DataSource = dsIssues
       end
       object Label1: TLabel
-        Left = 614
-        Top = 8
-        Width = 101
-        Height = 17
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 768
+        Top = 10
+        Width = 120
+        Height = 22
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Caption = #1053#1072#1076#1072#1090#1080' '#1089#1090#1072#1090#1091#1089':'
       end
       object dbmDescription: TDBMemo
-        Left = 10
-        Top = 30
-        Width = 1129
-        Height = 49
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 13
+        Top = 38
+        Width = 1411
+        Height = 61
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         Anchors = [akLeft, akTop, akRight, akBottom]
         DataField = 'description'
         DataSource = dsIssues
         TabOrder = 1
       end
       object dbePlannetTime: TDBEdit
-        Left = 223
-        Top = 4
-        Width = 33
-        Height = 25
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 279
+        Top = 5
+        Width = 41
+        Height = 30
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         DataField = 'planned_time'
         DataSource = dsIssues
         TabOrder = 0
       end
       object pnMove: TPanel
-        Left = 710
-        Top = 4
-        Width = 300
-        Height = 24
-        Margins.Left = 4
-        Margins.Top = 4
-        Margins.Right = 4
-        Margins.Bottom = 4
+        Left = 888
+        Top = 5
+        Width = 375
+        Height = 30
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
         BevelOuter = bvNone
         TabOrder = 2
       end
@@ -370,26 +370,27 @@ object fmMain: TfmMain
   end
   object dbgIssues: TDBGrid
     Left = 0
-    Top = 89
-    Width = 1148
-    Height = 367
-    Margins.Left = 4
-    Margins.Top = 4
-    Margins.Right = 4
-    Margins.Bottom = 4
+    Top = 111
+    Width = 1435
+    Height = 459
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
     Align = alClient
     DataSource = dsIssues
     ReadOnly = True
     TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
-    TitleFont.Height = -14
+    TitleFont.Height = -18
     TitleFont.Name = 'Tahoma'
     TitleFont.Style = []
     Columns = <
       item
         Expanded = False
         FieldName = 'ID'
+        Width = 100
         Visible = True
       end
       item
@@ -437,7 +438,7 @@ object fmMain: TfmMain
     Width = 32
     Left = 568
     Bitmap = {
-      494C0101030008005C0020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800600020002000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000800000002000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000E3E3E3009393

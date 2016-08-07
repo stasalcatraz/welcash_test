@@ -10,7 +10,8 @@ uses
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.VCLUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.Moni.Base,
-  FireDAC.Moni.FlatFile, FireDAC.Phys.Oracle, FireDAC.Phys.OracleDef;
+  FireDAC.Moni.FlatFile, FireDAC.Phys.Oracle, FireDAC.Phys.OracleDef,
+  Data.DBXOracle;
 
 type
   TdmData = class(TDataModule)
@@ -20,12 +21,11 @@ type
     spIssuesSTATUS_ID: TFMTBCDField;
     spIssuesSTATUS: TWideStringField;
     spIssuesPLANNED_TIME: TFloatField;
-    spIssuesACTUAL_TIME: TFMTBCDField;
-    updIssues: TFDUpdateSQL;
+    spIssuesACTUAL_TIME: TFloatField;
     spIssueMovements: TFDStoredProc;
     spIssueMovementsid: TFMTBCDField;
     spIssueMovementsissue_id: TFMTBCDField;
-    spIssueMovementsactual_time: TFMTBCDField;
+    spIssueMovementsactual_time: TFloatField;
     dsIssues: TDataSource;
     dsIssueMovements: TDataSource;
     spIssueMovementsmovement_date: TDateTimeField;
@@ -37,6 +37,7 @@ type
     spNextStatusesSTATUS_ID: TFMTBCDField;
     spNextStatusesID: TFMTBCDField;
     spNextStatusesNAME: TWideStringField;
+    updIssues: TFDUpdateSQL;
     procedure DataModuleCreate(Sender: TObject);
     procedure spIssuesAfterOpen(DataSet: TDataSet);
     procedure spIssuesAfterPost(DataSet: TDataSet);
@@ -61,7 +62,11 @@ uses
 
 procedure TdmData.DataModuleCreate(Sender: TObject);
 begin
-  updIssues.Commands[arFetchRow].SchemaName := 'bugtracker';
+//  updIssues.Commands[arInsert].SchemaName := 'bugtracker';
+  updIssues.Commands[arInsert].CommandKind := skStoredProcNoCrs;
+  updIssues.Commands[arInsert].Params.CreateParam(ftWideString, 'description', ptInput);
+  updIssues.Commands[arInsert].Params.CreateParam(ftFloat, 'planned_time', ptInput);
+//  updIssues.Commands[arFetchRow].SchemaName := 'bugtracker';
   updIssues.Commands[arFetchRow].CommandKind := skStoredProcWithCrs;
   updIssues.Commands[arFetchRow].Params.CreateParam(ftCursor, 'Result', ptResult);
   updIssues.Commands[arFetchRow].Params.CreateParam(ftFMTBcd, 'ID', ptInput);

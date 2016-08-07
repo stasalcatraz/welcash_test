@@ -1,9 +1,6 @@
 ﻿[]
-Coordinates=453,441,91,36
-ExplicitSubNodes=params['date_from']
-
-[updIssues]
 Coordinates=87,105,73,36
+ExplicitSubNodes=params['date_from']
 
 [spNextStatusesID]
 Coordinates=298,298,117,36

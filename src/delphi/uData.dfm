@@ -2,7 +2,7 @@ object dmData: TdmData
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   Height = 397
-  Width = 414
+  Width = 916
   object spIssues: TFDStoredProc
     AfterOpen = spIssuesAfterOpen
     AfterPost = spIssuesAfterPost
@@ -64,17 +64,18 @@ object dmData: TdmData
       Required = True
       DisplayFormat = '0.##'
     end
-    object spIssuesACTUAL_TIME: TFMTBCDField
+    object spIssuesACTUAL_TIME: TFloatField
       DisplayLabel = #1060#1072#1082#1090#1080#1095#1085#1086', '#1075#1086#1076'.'
       FieldName = 'ACTUAL_TIME'
-      DisplayFormat = '0.##'
     end
   end
   object fdcConnection: TFDConnection
     Params.Strings = (
       'CharacterSet=UTF8'
-      'DriverID=Ora'
-      'MonitorBy=FlatFile')
+      'Database=alcatraz:1521/welcash'
+      'Password=bt_user'
+      'User_Name=bt_user'
+      'DriverID=Ora')
     FormatOptions.AssignedValues = [fvMapRules]
     FormatOptions.OwnMapRules = True
     FormatOptions.MapRules = <
@@ -91,17 +92,10 @@ object dmData: TdmData
         SourceDataType = dtAnsiString
         TargetDataType = dtDateTime
       end>
+    ConnectedStoredUsage = [auDesignTime]
     LoginPrompt = False
     Left = 52
     Top = 32
-  end
-  object updIssues: TFDUpdateSQL
-    InsertSQL.Strings = (
-      'call sp_issues_ins(:description, :planned_time)')
-    FetchRowSQL.Strings = (
-      'sf_issues_fetch_row')
-    Left = 48
-    Top = 280
   end
   object spIssueMovements: TFDStoredProc
     MasterSource = dsIssues
@@ -154,11 +148,9 @@ object dmData: TdmData
       Required = True
       Size = 32767
     end
-    object spIssueMovementsactual_time: TFMTBCDField
+    object spIssueMovementsactual_time: TFloatField
       DisplayLabel = #1063#1072#1089', '#1075#1086#1076'.'
       FieldName = 'actual_time'
-      Origin = 'actual_time'
-      DisplayFormat = '0.##'
     end
   end
   object dsIssues: TDataSource
@@ -258,5 +250,14 @@ object dmData: TdmData
         NumericScale = 38
         ParamType = ptInput
       end>
+  end
+  object updIssues: TFDUpdateSQL
+    Connection = fdcConnection
+    InsertSQL.Strings = (
+      'bugtracker.sp_issues_ins')
+    FetchRowSQL.Strings = (
+      'bugtracker.sf_issues_fetch_row')
+    Left = 48
+    Top = 280
   end
 end
