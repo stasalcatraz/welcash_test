@@ -97,7 +97,7 @@ var
   L, I: Integer;
 begin
   L := 0;
-  with dmData.fdqSatusButtons do
+  with dmData.spStatusButtons do
   begin
     Open;
     FButtons := TDictionary<Integer,TButton>.Create(RecordCount);
@@ -167,7 +167,7 @@ var
   ro: Boolean;
 begin
  inherited UpdateActions;
-  ro := dmData.fdqIssues.State <> dsInsert;
+  ro := dmData.spIssues.State <> dsInsert;
   dbmDescription.ReadOnly := ro;
   dbePlannetTime.ReadOnly := ro;
   if FUpdateButtons then

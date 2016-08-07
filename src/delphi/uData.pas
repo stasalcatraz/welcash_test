@@ -10,35 +10,36 @@ uses
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs, FireDAC.VCLUI.Wait,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.Moni.Base,
-  FireDAC.Moni.FlatFile;
+  FireDAC.Moni.FlatFile, FireDAC.Phys.Oracle, FireDAC.Phys.OracleDef;
 
 type
   TdmData = class(TDataModule)
-    fdqIssues: TFDQuery;
-    fdcConnection: TFDConnection;
+    spIssues: TFDStoredProc;
+    spIssuesID: TFMTBCDField;
+    spIssuesDESCRIPTION: TWideStringField;
+    spIssuesSTATUS_ID: TFMTBCDField;
+    spIssuesSTATUS: TWideStringField;
+    spIssuesPLANNED_TIME: TFloatField;
+    spIssuesACTUAL_TIME: TFMTBCDField;
     updIssues: TFDUpdateSQL;
-    fdqIssueMovements: TFDQuery;
-    fdqIssueMovementsid: TIntegerField;
-    fdqIssueMovementsissue_id: TIntegerField;
-    fdqIssueMovementsactual_time: TFloatField;
+    spIssueMovements: TFDStoredProc;
+    spIssueMovementsid: TFMTBCDField;
+    spIssueMovementsissue_id: TFMTBCDField;
+    spIssueMovementsactual_time: TFMTBCDField;
     dsIssues: TDataSource;
     dsIssueMovements: TDataSource;
-    fdqIssueMovementsmovement_date: TDateTimeField;
-    fdqIssueMovementsstatus: TStringField;
-    fdqIssuesid: TFDAutoIncField;
-    fdqIssuesdescription: TStringField;
-    fdqIssuesstatus: TStringField;
-    fdqIssuesplanned_time: TFloatField;
-    fdqIssuesactual_time: TFloatField;
-    fdqNextStatuses: TFDQuery;
-    fdqNextStatusesid: TIntegerField;
-    fdqNextStatusesname: TStringField;
-    fdqSatusButtons: TFDQuery;
-    fdqIssuesistatus_id: TIntegerField;
-    fdqSetStatus: TFDQuery;
+    spIssueMovementsmovement_date: TDateTimeField;
+    spIssueMovementsstatus: TWideStringField;
+    spNextStatuses: TFDStoredProc;
+    spStatusButtons: TFDStoredProc;
+    spSetStatus: TFDStoredProc;
+    fdcConnection: TFDConnection;
+    spNextStatusesSTATUS_ID: TFMTBCDField;
+    spNextStatusesID: TFMTBCDField;
+    spNextStatusesNAME: TWideStringField;
     procedure DataModuleCreate(Sender: TObject);
-    procedure fdqIssuesAfterOpen(DataSet: TDataSet);
-    procedure fdqIssuesAfterPost(DataSet: TDataSet);
+    procedure spIssuesAfterOpen(DataSet: TDataSet);
+    procedure spIssuesAfterPost(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -60,40 +61,44 @@ uses
 
 procedure TdmData.DataModuleCreate(Sender: TObject);
 begin
-  fdcConnection.Params.Values['Database'] := ExtractFilePath(Application.ExeName) + 'welcash.db';
+  updIssues.Commands[arFetchRow].SchemaName := 'bugtracker';
+  updIssues.Commands[arFetchRow].CommandKind := skStoredProcWithCrs;
+  updIssues.Commands[arFetchRow].Params.CreateParam(ftCursor, 'Result', ptResult);
+  updIssues.Commands[arFetchRow].Params.CreateParam(ftFMTBcd, 'ID', ptInput);
+  fdcConnection.Params.LoadFromFile(ExtractFilePath(Application.ExeName) + 'connection.ini');
   fdcConnection.Connected := True;
 end;
 
-procedure TdmData.fdqIssuesAfterOpen(DataSet: TDataSet);
+procedure TdmData.spIssuesAfterOpen(DataSet: TDataSet);
 begin
-  fdqNextStatuses.Open;
-  fdqIssueMovements.Open;
+  spNextStatuses.Open;
+  spIssueMovements.Open;
 end;
 
-procedure TdmData.fdqIssuesAfterPost(DataSet: TDataSet);
+procedure TdmData.spIssuesAfterPost(DataSet: TDataSet);
 begin
-  fdqIssues.Refresh;
+  spIssues.Refresh;
 end;
 
 procedure TdmData.RefreshIssues(ADateFrom, ADateTo: TDateTime);
 begin
-  with fdqIssues do
+  with spIssues do
   begin
     Close;
-    Params.ParamByName('date_from').AsDate := ADateFrom;
-    Params.ParamByName('date_to').AsDate := ADateTo;
+    Params.ParamByName('date_from').AsDateTime := ADateFrom;
+    Params.ParamByName('date_to').AsDateTime := ADateTo;
     Open;
   end;
 end;
 
 procedure TdmData.SetStatus(AStatus: Integer);
 begin
-  fdqSetStatus.ParamByName('issue_id').Value := fdqIssues.FieldByName('id').AsVariant;
-  fdqSetStatus.ParamByName('status_id').AsInteger := AStatus;
-  fdqSetStatus.ExecSQL;
-  fdqIssues.RefreshRecord;
-  fdqIssueMovements.Refresh;
-  fdqNextStatuses.Refresh;
+  spSetStatus.ParamByName('issue_id').Value := spIssues.FieldByName('id').AsVariant;
+  spSetStatus.ParamByName('status_id').Value := AStatus;
+  spSetStatus.ExecProc;
+  spIssues.RefreshRecord;
+  spIssueMovements.Refresh;
+  spNextStatuses.Refresh;
 end;
 
 end.

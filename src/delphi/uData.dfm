@@ -1,103 +1,80 @@
 object dmData: TdmData
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Height = 300
-  Width = 376
-  object fdqIssues: TFDQuery
-    AfterOpen = fdqIssuesAfterOpen
-    AfterPost = fdqIssuesAfterPost
+  Height = 397
+  Width = 414
+  object spIssues: TFDStoredProc
+    AfterOpen = spIssuesAfterOpen
+    AfterPost = spIssuesAfterPost
     Connection = fdcConnection
-    UpdateOptions.AssignedValues = [uvEDelete, uvEUpdate]
-    UpdateOptions.EnableDelete = False
-    UpdateOptions.EnableUpdate = False
+    FetchOptions.AssignedValues = [evItems, evCache, evCursorKind]
     UpdateObject = updIssues
-    SQL.Strings = (
-      'select'
-      '  id,'
-      '  description,'
-      '  status_id,'
-      '  status,'
-      '  planned_time,'
-      '  actual_time'
-      'from'
-      '  vw_issues i'
-      'where'
-      '  exists('
-      '    select 1 from tbl_issue_movements im'
-      '    where'
-      '      issue_id = i.id'
-      '      and im.movement_date >= :date_from'
-      '      and im.movement_date < date( :date_to, '#39'1 days'#39')'
-      '  ) or (select status_id from tbl_issue_movements'
-      '    where issue_id = i.id and movement_date ='
-      
-        '      (select max(movement_date) from tbl_issue_movements where ' +
-        'issue_id = i.id'
-      '         and movement_date < :date_from) limit 1'
-      '     ) < 5')
+    SchemaName = 'bugtracker'
+    StoredProcName = 'sp_issues'
     Left = 48
-    Top = 96
+    Top = 168
     ParamData = <
       item
+        Position = 1
         Name = 'DATE_FROM'
-        DataType = ftDate
+        DataType = ftDateTime
+        FDDataType = dtDateTime
+        NumericScale = 1000
         ParamType = ptInput
-        Value = 42491d
       end
       item
+        Position = 2
         Name = 'DATE_TO'
-        DataType = ftDate
+        DataType = ftDateTime
+        FDDataType = dtDateTime
+        NumericScale = 1000
         ParamType = ptInput
-        Value = 42512d
+      end
+      item
+        Position = 3
+        Name = 'RES'
+        DataType = ftCursor
+        FDDataType = dtCursorRef
+        ParamType = ptOutput
       end>
-    object fdqIssuesid: TFDAutoIncField
-      FieldName = 'id'
-      Origin = 'id'
+    object spIssuesID: TFMTBCDField
+      DisplayLabel = '#'
+      FieldName = 'ID'
       ProviderFlags = [pfInWhere, pfInKey]
       ReadOnly = True
-      Visible = False
     end
-    object fdqIssuesdescription: TStringField
+    object spIssuesDESCRIPTION: TWideStringField
       DisplayLabel = #1054#1087#1080#1089
-      FieldName = 'description'
-      Origin = 'description'
+      FieldName = 'DESCRIPTION'
       Required = True
-      Size = 32767
+      Size = 1000
     end
-    object fdqIssuesistatus_id: TIntegerField
-      FieldName = 'status_id'
-      Origin = '"i.status_id"'
+    object spIssuesSTATUS_ID: TFMTBCDField
+      FieldName = 'STATUS_ID'
       Visible = False
     end
-    object fdqIssuesstatus: TStringField
+    object spIssuesSTATUS: TWideStringField
       DisplayLabel = #1057#1090#1072#1090#1091#1089
-      FieldName = 'status'
-      Origin = 'status'
-      ProviderFlags = [pfInWhere]
-      Size = 32767
+      FieldName = 'STATUS'
+      Size = 64
     end
-    object fdqIssuesplanned_time: TFloatField
+    object spIssuesPLANNED_TIME: TFloatField
       DisplayLabel = #1047#1072#1087#1083#1072#1085#1086#1074#1072#1085#1086', '#1075#1086#1076'.'
-      FieldName = 'planned_time'
-      Origin = 'planned_time'
+      FieldName = 'PLANNED_TIME'
       Required = True
       DisplayFormat = '0.##'
     end
-    object fdqIssuesactual_time: TFloatField
+    object spIssuesACTUAL_TIME: TFMTBCDField
       DisplayLabel = #1060#1072#1082#1090#1080#1095#1085#1086', '#1075#1086#1076'.'
-      FieldName = 'actual_time'
-      Origin = 'actual_time'
-      ProviderFlags = [pfInWhere]
+      FieldName = 'ACTUAL_TIME'
       DisplayFormat = '0.##'
     end
   end
   object fdcConnection: TFDConnection
     Params.Strings = (
-      'Database=./welcash.db'
-      'DriverID=SQLite'
-      'StringFormat=ANSI'
-      'MonitorBy=FlatFile'
-      'LockingMode=Normal')
+      'CharacterSet=UTF8'
+      'DriverID=Ora'
+      'MonitorBy=FlatFile')
     FormatOptions.AssignedValues = [fvMapRules]
     FormatOptions.OwnMapRules = True
     FormatOptions.MapRules = <
@@ -119,76 +96,65 @@ object dmData: TdmData
     Top = 32
   end
   object updIssues: TFDUpdateSQL
-    Connection = fdcConnection
     InsertSQL.Strings = (
-      'insert into tbl_issues(description, planned_time) '
-      'values (:description, :planned_time)')
+      'call sp_issues_ins(:description, :planned_time)')
     FetchRowSQL.Strings = (
-      'select'
-      '  id,'
-      '  description,'
-      '  status_id,'
-      '  status,'
-      '  planned_time,'
-      '  actual_time'
-      'from'
-      '  vw_issues'
-      'where'
-      '  id = :id')
+      'sf_issues_fetch_row')
     Left = 48
-    Top = 208
+    Top = 280
   end
-  object fdqIssueMovements: TFDQuery
+  object spIssueMovements: TFDStoredProc
     MasterSource = dsIssues
     MasterFields = 'id'
     DetailFields = 'issue_id'
     Connection = fdcConnection
-    SQL.Strings = (
-      'select'
-      '  id,'
-      '  issue_id,'
-      '  datetime(movement_date) as movement_date,'
-      '  status,'
-      '  actual_time'
-      'from'
-      '  vw_issue_movements'
-      'where'
-      '  issue_id = :id')
+    SchemaName = 'bugtracker'
+    StoredProcName = 'SP_ISSUE_MOVEMENTS'
     Left = 128
-    Top = 96
+    Top = 168
     ParamData = <
       item
+        Position = 1
         Name = 'ID'
-        DataType = ftInteger
+        DataType = ftFMTBcd
+        FDDataType = dtFmtBCD
+        Precision = 38
+        NumericScale = 38
         ParamType = ptInput
-        Value = Null
+      end
+      item
+        Position = 2
+        Name = 'RES'
+        DataType = ftCursor
+        FDDataType = dtCursorRef
+        ParamType = ptOutput
       end>
-    object fdqIssueMovementsid: TIntegerField
+    object spIssueMovementsid: TFMTBCDField
       FieldName = 'id'
       Origin = 'id'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
       Visible = False
     end
-    object fdqIssueMovementsissue_id: TIntegerField
+    object spIssueMovementsissue_id: TFMTBCDField
       FieldName = 'issue_id'
       Origin = 'issue_id'
       Required = True
       Visible = False
     end
-    object fdqIssueMovementsmovement_date: TDateTimeField
+    object spIssueMovementsmovement_date: TDateTimeField
       DisplayLabel = #1044#1072#1090#1072
       FieldName = 'movement_date'
       Origin = 'movement_date'
     end
-    object fdqIssueMovementsstatus: TStringField
+    object spIssueMovementsstatus: TWideStringField
       DisplayLabel = #1057#1090#1072#1090#1091#1089
       FieldName = 'status'
       Origin = 'status'
       Required = True
       Size = 32767
     end
-    object fdqIssueMovementsactual_time: TFloatField
+    object spIssueMovementsactual_time: TFMTBCDField
       DisplayLabel = #1063#1072#1089', '#1075#1086#1076'.'
       FieldName = 'actual_time'
       Origin = 'actual_time'
@@ -196,92 +162,101 @@ object dmData: TdmData
     end
   end
   object dsIssues: TDataSource
-    DataSet = fdqIssues
+    DataSet = spIssues
     Left = 48
-    Top = 155
+    Top = 227
   end
   object dsIssueMovements: TDataSource
-    DataSet = fdqIssueMovements
+    DataSet = spIssueMovements
     Left = 128
-    Top = 156
+    Top = 228
   end
-  object fdqNextStatuses: TFDQuery
+  object spNextStatuses: TFDStoredProc
     MasterSource = dsIssues
     MasterFields = 'status_id'
     DetailFields = 'status_id'
     Connection = fdcConnection
-    SQL.Strings = (
-      'select'
-      '  sm.status_from as status_id,'
-      '  s.id,'
-      '  s.name'
-      'from'
-      '  tbl_statuses s'
-      '  inner join tbl_status_movements sm on sm.status_to = s.id'
-      'where'
-      '  sm.status_from = :status_id'
-      'order by '
-      '  s.id')
-    Left = 224
-    Top = 96
+    SchemaName = 'bugtracker'
+    StoredProcName = 'sp_next_statuses'
+    Left = 216
+    Top = 168
     ParamData = <
       item
+        Position = 1
         Name = 'STATUS_ID'
-        DataType = ftInteger
+        DataType = ftFMTBcd
+        FDDataType = dtFmtBCD
+        Precision = 38
+        NumericScale = 38
         ParamType = ptInput
-        Value = Null
+      end
+      item
+        Position = 2
+        Name = 'RES'
+        DataType = ftCursor
+        FDDataType = dtCursorRef
+        ParamType = ptOutput
       end>
-    object fdqNextStatusesid: TIntegerField
-      FieldName = 'id'
-      Origin = 'id'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    object spNextStatusesID: TFMTBCDField
+      FieldName = 'ID'
+      Origin = 'ID'
       Required = True
+      Precision = 19
+      Size = 0
     end
-    object fdqNextStatusesname: TStringField
-      FieldName = 'name'
-      Origin = 'name'
+    object spNextStatusesSTATUS_ID: TFMTBCDField
+      FieldName = 'STATUS_ID'
+      Origin = 'STATUS_ID'
+      Required = True
+      Precision = 19
+      Size = 0
+    end
+    object spNextStatusesNAME: TWideStringField
+      FieldName = 'NAME'
+      Origin = 'NAME'
       Required = True
       Size = 64
     end
   end
-  object fdqSatusButtons: TFDQuery
+  object spStatusButtons: TFDStoredProc
     Connection = fdcConnection
-    SQL.Strings = (
-      'select distinct'
-      '  s.id,'
-      '  s.name'
-      'from'
-      '  tbl_statuses s'
-      '  inner join tbl_status_movements sm on s.id = sm.status_to'
-      'order by'
-      '  s.id')
+    SchemaName = 'bugtracker'
+    StoredProcName = 'sp_status_buttons'
     Left = 312
-    Top = 96
-  end
-  object fdqSetStatus: TFDQuery
-    Connection = fdcConnection
-    SQL.Strings = (
-      'insert into tbl_issue_movements ('
-      '  issue_id,'
-      '  status_id'
-      ') values ('
-      '  :issue_id,'
-      '  :status_id'
-      ')')
-    Left = 224
-    Top = 192
+    Top = 168
     ParamData = <
       item
+        Position = 1
+        Name = 'RES'
+        DataType = ftCursor
+        FDDataType = dtCursorRef
+        ParamType = ptOutput
+      end>
+  end
+  object spSetStatus: TFDStoredProc
+    Connection = fdcConnection
+    SchemaName = 'bugtracker'
+    StoredProcName = 'sp_issue_movements_ins'
+    Left = 312
+    Top = 232
+    ParamData = <
+      item
+        Position = 1
         Name = 'ISSUE_ID'
-        DataType = ftInteger
+        DataType = ftFMTBcd
+        FDDataType = dtFmtBCD
+        Precision = 38
+        NumericScale = 38
         ParamType = ptInput
-        Value = Null
       end
       item
+        Position = 2
         Name = 'STATUS_ID'
-        DataType = ftInteger
+        DataType = ftFMTBcd
+        FDDataType = dtFmtBCD
+        Precision = 38
+        NumericScale = 38
         ParamType = ptInput
-        Value = Null
       end>
   end
 end
