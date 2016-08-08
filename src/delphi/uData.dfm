@@ -67,6 +67,7 @@ object dmData: TdmData
     object spIssuesACTUAL_TIME: TFloatField
       DisplayLabel = #1060#1072#1082#1090#1080#1095#1085#1086', '#1075#1086#1076'.'
       FieldName = 'ACTUAL_TIME'
+      DisplayFormat = '0.##'
     end
   end
   object fdcConnection: TFDConnection
@@ -151,6 +152,7 @@ object dmData: TdmData
     object spIssueMovementsactual_time: TFloatField
       DisplayLabel = #1063#1072#1089', '#1075#1086#1076'.'
       FieldName = 'actual_time'
+      DisplayFormat = '0.##'
     end
   end
   object dsIssues: TDataSource

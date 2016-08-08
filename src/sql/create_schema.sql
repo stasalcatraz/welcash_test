@@ -1,7 +1,8 @@
 /* Execute with SYSDBA privileges */
-drop user bugtracker cascade;
-drop user bt_user cascade;
-drop role bugtracker_user;
+/* Удаляем предыдущую версию схемы, пользователя и роли */
+--drop user bugtracker cascade;
+--drop user bt_user cascade;
+--drop role bugtracker_user;
 /* Создание схемы */
 create user bugtracker identified by bugtracker quota unlimited on USERS;
 /
